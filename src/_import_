@@ -1,0 +1,592 @@
+#!/usr/bin/env bash
+
+################################################################################
+######################## Definitions of user variables #########################
+################################################################################
+
+export _cmdtime_state=0
+
+
+################################################################################
+######################## Definitions of user functions #########################
+################################################################################
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _init_function()
+#
+# Description:
+#   It deals with launching functions:
+#     - creates a simple environment for the functions you perform
+#     - operates on message to display and command to execute
+#
+# Usage:
+#   _init_function function_name params
+#
+# Examples:
+#   _init_function "CheckConn 172.20.20.50 22"
+#
+
+function _init_function() {
+
+  local _FUNCTION_ID="_init_function"
+  local _STATE=0
+
+  local _args=("$@")
+
+  local _cmd_begtime=0
+  local _cmd_endtime=0
+  local _cmd_totaltime=0
+
+  _logger "info" \
+    "${_FUNCTION_ID}()" \
+    "init function: '${_args[*]}'"
+
+  # In these two variables we store the message to display
+  # and the command to execute.
+  export _msg_args=()
+  export _cmd_args=()
+
+  eval "${_args[@]}" ; if [ ! $? ] ; then _exit_ 255 ; fi
+
+  _num=${#_msg_args[@]}
+  for (( _xa=0 ; _xa<=((_num - 1)) ; _xa++ )) ; do
+
+    _msg="${_msg_args[$_xa]}"
+    _full_command="${_cmd_args[$_xa]}"
+
+    _sprintf "info" "$_msg"
+
+    _logger "info" \
+      "${_FUNCTION_ID}()" \
+      "$_msg"
+
+    _cmd_begtime=$(date +%s)
+
+    _init_cmd "$_full_command" ; if [ ! $? ] ; then _exit_ 255 ; fi
+
+    _cmd_endtime=$(date +%s)
+
+    # shellcheck disable=SC2154
+    if [[ "$time_mode" -eq 1 ]] && [[ "$_cmdtime_state" -eq 1 ]] ; then
+
+      _cmd_totaltime=$((_cmd_endtime - _cmd_begtime))
+
+      _cmd_totaltime_out=$(printf '%dh:%dm:%ds' \
+      $((_cmd_totaltime/3600)) $((_cmd_totaltime%3600/60)) $((_cmd_totaltime%60)))
+
+      _sprintf "info" "time: $_cmd_totaltime_out"
+
+      _logger "info" \
+        "${_FUNCTION_ID}()" \
+        "time: $_cmd_totaltime_out"
+
+    fi
+
+  done
+
+  _cmdtime_state=0
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: CheckVar()
+#
+# Description:
+#   Checks the values of all supplied variables.
+#
+# Usage:
+#   CheckVar
+#
+# Examples:
+#   CheckVar
+#
+
+function CheckVar() {
+
+  local _FUNCTION_ID="CheckVar"
+  local _STATE=0
+
+  local _varg="$1"
+
+  _i="" ; eval _i='$'"$_varg"
+
+  local _num='^[0-9]+$'
+
+  # Filtering the length of variable values.
+  if [[ "${#_i}" -gt 512 ]] ; then
+
+    # shellcheck disable=SC2154
+    _sprintf "stop" "$i: too long value"
+
+    _logger "stop" \
+      "${_FUNCTION_ID}()" \
+      "$i: too long value"
+
+  fi
+
+  # shellcheck disable=SC2154
+  case $i in
+
+    # hv_host|vm_id|hv_storage|re_path|pv_path|ssh_opt|dd_opt)
+
+    pve_id)
+
+      # We check the virtual machine ID and its numeric value.
+      if [[ "$pve_id" =~ $_num ]] ; then
+
+        # shellcheck disable=SC2143
+        # If the value is a number then we check whether the virtual machine
+        # with that identifier exists in the Proxmox VE cluster.
+        if [[ ! $(grep "qemu" /etc/pve/.vmlist | cut -d ":" -f1 | grep "$pve_id") ]] ; then
+
+          _sprintf "stop" "pve_id: vm with this id does not exist"
+
+          _logger "stop" \
+            "${_FUNCTION_ID}()" \
+            "pve_id: vm with this id does not exist"
+
+        fi
+
+      else
+
+        _sprintf "stop" "pve_id: vm id has no numeric value"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "pve_id: vm id has no numeric value"
+
+      fi
+
+    ;;
+
+    pve_format)
+
+      if [[ "$pve_format" != "raw" ]] && [[ "$pve_format" != "qcow2" ]] ; then
+
+        _sprintf "stop" "pve_format: incorrectly set format type (properly: 'raw' or 'qcow2')"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "pve_format: incorrectly set format type (properly: raw or qcow2)"
+
+      fi
+
+      if [[ "$pve_format" == "qcow2" ]] && [[ "$pve_dst" == "lvm" ]] ; then
+
+        _sprintf "stop" "'qcow2' can not use with 'lvm'"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "'qcow2' can not use with 'lvm'"
+
+      fi
+
+    ;;
+
+    pve_dst)
+
+      if [[ "$pve_dst" != "dir" ]] && [[ "$pve_dst" != "lvm" ]] ; then
+
+        _sprintf "stop" "pve_dst: incorrectly set output type (properly: 'dir' or 'lvm')"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "pve_dst: incorrectly set output type (properly: 'dir' or 'lvm')"
+
+      fi
+
+    ;;
+
+    hv_type)
+
+      if [[ "$hv_type" != "vmware" ]] && [[ "$hv_type" != "xen" ]] ; then
+
+        _sprintf "stop" "hv_type: incorrectly set hypervisor type (properly: 'xen' or 'vmware')"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "hv_type: incorrectly set hypervisor type (properly: 'xen' or 'vmware')"
+
+      fi
+
+    ;;
+
+    port)
+
+      if [[ ! "$port" =~ $_num ]] ; then
+
+        _sprintf "stop" "port: has no numeric value"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "port: has no numeric value"
+
+      elif [[ ! "$port" -ge 1 ]] || [[ ! "$port" -le 65535 ]] ; then
+
+        _sprintf "stop" "port: value out of range"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "port: value out of range"
+
+      fi
+
+    ;;
+
+    local_storage)
+
+      if [[ ! -d "$_i" ]] ; then
+
+        _sprintf "stop" "$i: incorrectly set storage (does not exist?)"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "$i: incorrectly set storage (does not exist?)"
+
+      fi
+
+    ;;
+
+    lo_path)
+
+      if [[ ! -d "$lo_path" ]] ; then
+
+        _logger "info" \
+          "${_FUNCTION_ID}()" \
+          "creating a local directory: '$lo_path'"
+
+        mkdir -p "$lo_path"
+
+      fi
+
+    ;;
+
+  esac
+
+  _sprintf "info" "${i}: '$_i'"
+
+  _logger "info" \
+    "${_FUNCTION_ID}()" \
+    "${i}: '$_i'"
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: CheckConn()
+#
+# Description:
+#   Check connection to remote host.
+#
+# Usage:
+#   CheckConn host port
+#
+# Examples:
+#   CheckConn 172.20.20.50 22
+#
+
+function CheckConn() {
+
+  local _FUNCTION_ID="CheckConn"
+  local _STATE=0
+
+  local _host="$1"
+  local _port="$2"
+
+  # We test two types of connections that will be used.
+  _msg_args+=(\
+  "host (tcp): '${_host}'" \
+  "host (ssh): '${_host}'")
+
+  _cmd_args+=(\
+  "eval timeout 1 bash -c \"</dev/tcp/${_host}/${_port}\"" \
+  "ssh ${ssh_opt} ${_host} -p ${_port} exit 0")
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: FlushRemoteFiles()
+#
+# Description:
+#   Flush configuration of remote environment.
+#
+# Usage:
+#   FlushRemoteFiles /path/to/file
+#
+# Examples:
+#   FlushRemoteFiles /tmp/.cache
+#
+
+function FlushRemoteFiles() {
+
+  local _FUNCTION_ID="FlushRemoteFiles"
+  local _STATE=0
+
+  local _file="$1"
+
+  _msg_args+=(\
+  "src: '${_file}")
+
+  _cmd_args+=(\
+  "ssh ${ssh_opt} ${hv_host} -p ${port} >${_file}")
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: GetRemoteFiles()
+#
+# Description:
+#   Dump of the remote environment to local.
+#
+# Usage:
+#   GetRemoteFiles /path/to/file
+#
+# Examples:
+#   GetRemoteFiles /tmp/.cache
+#
+
+function GetRemoteFiles() {
+
+  local _FUNCTION_ID="GetRemoteFiles"
+  local _STATE=0
+
+  local _file_src="$1"
+  local _file_dst="$2"
+
+  _msg_args+=(\
+  "checking: '$_file_src'" \
+  "get src: '$_file_src'")
+
+  _cmd_args+=(\
+  "ssh ${ssh_opt} ${hv_host} -p ${port} if [[ ! -e \"${_file_src}\" ]] ; then exit 1 ; fi" \
+  "scp ${ssh_opt} -P ${port} ${hv_host}:${_file_src} ${_file_dst}")
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: CheckRemoteStorage()
+#
+# Description:
+#   Checks of the remote storage.
+#
+# Usage:
+#   CheckRemoteStorage /path/to/directory
+#
+# Examples:
+#   CheckRemoteStorage /var/log
+#
+
+function CheckRemoteStorage() {
+
+  local _FUNCTION_ID="CheckRemoteStorage"
+  local _STATE=0
+
+  local _storage="$1"
+
+  _msg_args+=(\
+  "directory: '${_storage}'")
+
+  _cmd_args+=(\
+  "ssh ${ssh_opt} ${hv_host} -p ${port} if [[ ! -d \"${_storage}\" ]] ; then exit 1 ; fi")
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: CreateRemoteStorage()
+#
+# Description:
+#   Create of the remote storage.
+#
+# Usage:
+#   CreateRemoteStorage /path/to/directory
+#
+# Examples:
+#   CreateRemoteStorage /var/log
+#
+
+function CreateRemoteStorage() {
+
+  local _FUNCTION_ID="CreateRemoteStorage"
+  local _STATE=0
+
+  local _storage="$1"
+
+  _msg_args+=(\
+  "create: '${_storage}'")
+
+  _cmd_args+=(\
+  "ssh ${ssh_opt} ${hv_host} -p ${port} mkdir \"${_storage}\" || exit 1")
+
+  return $_STATE
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: VmImport()
+#
+# Description:
+#   Imports the virtual machine disks to any Proxmox VE node.
+#
+# Usage:
+#   VmImport /path/to/local/disk
+#
+# Examples:
+#   VmImport /xfs900/datastore/vmware/PROD-web01.img
+#
+
+function VmImport() {
+
+  local _FUNCTION_ID="VmImport"
+  local _STATE=0
+
+  _cmdtime_state=1
+
+  local _fda="$1"
+
+  _msg_args+=(\
+  "checking: '${_fda}'")
+
+  _cmd_args+=(\
+  "eval if [[ ! -e ${_fda} ]] ; then exit 1 ; fi")
+
+  if [[ "$pve_format" == "raw" ]] ; then
+
+    if [[ "$pve_dst" == "dir" ]] ; then
+
+      # shellcheck disable=SC2154
+      local _vm_pv_local="${pv_path}/vm-${pve_id}-disk-${_x}.img"
+
+    elif [[ "$pve_dst" == "lvm" ]] ; then
+
+      # shellcheck disable=SC2154
+      local _vm_pv_local="${pve_lvm}/vm-${pve_id}-disk-${_x}"
+
+    fi
+
+    # shellcheck disable=SC2154
+    if [[ "$pve_host" == "local" ]] ; then
+
+      if [[ "$pve_dst" == "dir" ]] ; then
+
+        _msg_args+=(\
+        "checking: '${_vm_pv_local}'" \
+        "src: '${_fda}', dst path: '${_vm_pv_local}'")
+
+        _cmd_args+=(\
+        "eval if [[ ! -e ${_vm_pv_local} ]] ; then exit 1 ; fi" \
+        "cp ${_fda} ${_vm_pv_local}")
+
+      elif [[ "$pve_dst" == "lvm" ]] ; then
+
+        _msg_args+=(\
+        "checking: '${_vm_pv_local}'" \
+        "src: '${_fda}', dst path: '${_vm_pv_local}'")
+
+        _cmd_args+=(\
+        "eval if [[ ! -e ${_vm_pv_local} ]] ; then exit 1 ; fi" \
+        "dd if=${_fda} of=${_vm_pv_local} ${dd_opt}")
+
+      fi
+
+    elif [[ "$pve_host" != "local" ]] ; then
+
+      if [[ "$pve_dst" == "dir" ]] ; then
+
+        _msg_args+=(\
+        "checking: '${pve_host}:${_vm_pv_local}'" \
+        "src: '${_fda}'")
+
+        _cmd_args+=(\
+        "ssh ${ssh_opt} ${pve_host} -p ${port} if [[ ! -e \"${_vm_pv_local}\" ]] ; then exit 1 ; fi" \
+        "scp ${ssh_opt} ${_fda} -P ${port} ${pve_host}:${_vm_pv_local}")
+
+      elif [[ "$pve_dst" == "lvm" ]] ; then
+
+        _msg_args+=(\
+        "checking: '${pve_host}:${_vm_pv_local}'" \
+        "src: '${_fda}', dst path: '${pve_host}:${_vm_pv_local}'")
+
+        _cmd_args+=(\
+        "ssh ${ssh_opt} ${pve_host} -p ${port} if [[ ! -e \"${_vm_pv_local}\" ]] ; then exit 1 ; fi" \
+        "eval dd if=${_fda} ${dd_opt} | ssh ${ssh_opt} ${pve_host} -p ${port} dd of=${_vm_pv_local} ${dd_opt}")
+
+      fi
+
+    fi
+
+    # shellcheck disable=SC2154
+    if [[ "$remove_unused" == "yes" ]] ; then
+
+      _msg_args+=(\
+      "remove: '${_fda}'")
+
+      _cmd_args+=(\
+      "rm -fr ${_fda}")
+
+    fi
+
+  elif [[ "$pve_format" == "qcow2" ]] ; then
+
+    if [[ "$pve_dst" == "dir" ]] ; then
+
+      # shellcheck disable=SC2154
+      local _vm_pv_local="${pv_path}/vm-${pve_id}-disk-${_x}.qcow2"
+
+    elif [[ "$pve_dst" == "lvm" ]] ; then
+
+      _sprintf "stop" "'qcow2' can not use with 'lvm'"
+
+      _logger "stop" \
+        "${_FUNCTION_ID}()" \
+        "'qcow2' can not use with 'lvm'"
+
+    fi
+
+    if [[ "$pve_host" == "local" ]] ; then
+
+      _msg_args+=(\
+      "checking: '${_vm_pv_local}'" \
+      "src: '${_fda}'")
+
+      _cmd_args+=(\
+      "eval if [[ ! -e ${_vm_pv_local} ]] ; then exit 1 ; fi" \
+      "cp ${_fda} ${_vm_pv_local}")
+
+    elif [[ "$pve_host" != "local" ]] ; then
+
+      _msg_args+=(\
+      "checking: '${pve_host}:${_vm_pv_local}'" \
+      "src: '${_fda}'")
+
+      _cmd_args+=(\
+      "ssh ${ssh_opt} ${pve_host} -p ${port} if [[ ! -e \"${_vm_pv_local}\" ]] ; then exit 1 ; fi" \
+      "scp ${ssh_opt} ${_fda} -P ${port} ${pve_host}:${_vm_pv_local}")
+
+    fi
+
+    if [[ "$remove_unused" == "yes" ]] ; then
+
+      _msg_args+=(\
+      "remove: '${_fda}'")
+
+      _cmd_args+=(\
+      "rm -fr ${_fda}")
+
+    fi
+
+  fi
+
+  _x=$((_x + 1))
+
+  return $_STATE
+
+}
