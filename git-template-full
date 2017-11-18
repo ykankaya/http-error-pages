@@ -4,7 +4,7 @@
 #
 # Header:
 #
-#         fname : "git-template"
+#         fname : "git-template-full"
 #         cdate : "00.00.0000"
 #        author : "Michał Żurawski <contact@nslab.at>"
 #      tab_size : "2"
@@ -16,7 +16,7 @@
 #
 # License:
 #
-#   git-template, Copyright (C) 2017  Michał Żurawski
+#   git-template-full, Copyright (C) 2017  Michał Żurawski
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by

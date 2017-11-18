@@ -1,4 +1,4 @@
-# git-template
+# git-template-full
 
 ## Version
 
@@ -15,10 +15,10 @@ Provides the following options:
 
 ``````
   Usage:
-    git-template <option|long-option>
+    git-template-full <option|long-option>
 
   Examples:
-    git-template --help
+    git-template-full --help
 
   Options:
         --help                      show this message
@@ -43,7 +43,7 @@ The configuration file (appended with the `-c|--config` parameter) has the follo
 
 ## Requirements
 
-**<u>git-template</u>** uses external utilities to be installed before running:
+**<u>git-template-full</u>** uses external utilities to be installed before running:
 
 - link-to-external-tool
 
@@ -54,7 +54,7 @@ The configuration file (appended with the `-c|--config` parameter) has the follo
 Then an example of starting the tool:
 
 ``````
-git-template -c src/configs/template.cfg --time --verbose
+git-template-full -c src/configs/template.cfg --time --verbose
 ``````
 
 In the first place we define the configuration (which should be prepared in advance):
@@ -81,7 +81,7 @@ Verbose mode - displays more detailed information on the screen:
 
 ## Project architecture
 
-    |-- git-template            # main script (init)
+    |-- git-template-full       # main script (init)
     |-- LICENSE.md              # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
     |-- README.md               # this simple documentation
     |-- .gitignore              # ignore untracked files
