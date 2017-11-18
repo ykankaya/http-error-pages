@@ -37,10 +37,6 @@ The configuration file (appended with the `-c|--config` parameter) has the follo
 
 ``````
 
-## Before importing
-
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed mollis nunc, sed lacinia ligula. Sed ac ante ipsum. Aliquam molestie, eros sed aliquam cursus, ante ipsum volutpat nisl, at pretium diam lacus at quam. Suspendisse commodo magna eu aliquet fringilla.
-
 ## Requirements
 
 **<u>git-template-full</u>** uses external utilities to be installed before running:
