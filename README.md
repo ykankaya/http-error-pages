@@ -55,7 +55,7 @@ git-template-full -c src/configs/template.cfg --time --verbose
 
 In the first place we define the configuration (which should be prepared in advance):
 
-- `-c src/configs/xen.cfg`
+- `-c src/configs/template.cfg`
 
 Displays the execution time of the selected commands (only with `--verbose` mode):
 
