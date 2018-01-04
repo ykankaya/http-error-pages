@@ -754,6 +754,25 @@ function __main__() {
   # Generate random value.
   _random=$(date +"%s")
 
+  # Checking the value of the variables (if they are unset or empty):
+  #   - variables for call parameters
+  #   - variables from the additional configuration files
+  for i in load_state ; do
+
+    _i="" ; eval _i='$'$i
+
+    if [[ -z "$_i" ]] ; then
+
+      _sprintf "stop" "error of argument value: '$i' is unset or empty"
+
+      _logger "stop" \
+        "${_FUNCTION_ID}()" \
+        "error of argument value: '$i' is unset or empty"
+
+    fi
+
+  done
+
   # Checking the relationship between call parameters.
   if [[ "$time_mode" -eq 1 ]] ; then
 
