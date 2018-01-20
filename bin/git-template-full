@@ -35,7 +35,7 @@
 
 
 source ../src/settings
-source ../src/core
+source ../src/helpers
 source ../src/__init__
 
 # We pass arguments to the __main__ function.
