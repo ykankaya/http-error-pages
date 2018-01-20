@@ -70,7 +70,7 @@ __script_params=("$@")
 
 # Store the name of the script and directory call.
 readonly _init_name="$(basename "$0")"
-readonly _init_directory="$(dirname "$(readlink -f "$0")")"
+readonly _init_directory="$(dirname "$(readlink -f "$0")")/.."
 
 # Directory structure.
 readonly _src_directory="${_init_directory}/src"
