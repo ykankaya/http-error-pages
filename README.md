@@ -75,9 +75,9 @@ Verbose mode - displays more detailed information on the screen:
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed mollis nunc, sed lacinia ligula. Sed ac ante ipsum. Aliquam molestie, eros sed aliquam cursus, ante ipsum volutpat nisl, at pretium diam lacus at quam. Suspendisse commodo magna eu aliquet fringilla.
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed mollis nunc, sed lacinia ligula. Sed ac ante ipsum. Aliquam molestie, eros sed aliquam cursus, ante ipsum volutpat nisl, at pretium diam lacus at quam. Suspendisse commodo magna eu aliquet fringilla.
 
-## Contributions
+## Contributing
 
-If you are interested in support, you have an interesting idea how to improve the operation of this tool or found some errors - do fork this project, add your fixes and add pull-request of your branch to the testing branch of this project.
+If you are interested in support, you have an interesting idea how to improve the operation of this tool or found some errors - do fork this project, add your fixes and add pull-request of your branch to the testing branch.
 
 ## Project architecture
 
