@@ -248,6 +248,11 @@ function _logger() {
 
   fi
 
+  # By means of this construction, we can terminate the operation
+  # of the script with the action of logging into the log file.
+  # This do not have to remember to place the _exit_ <value> function
+  # in 'exit' script points. If you prefer to have more control,
+  # do not use the _logger function with the 'stop' parameter.
   if [[ "$_type" == "stop" ]] ; then _exit_ 255 ; fi
 
   return $_STATE
