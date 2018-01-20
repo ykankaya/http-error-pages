@@ -91,15 +91,17 @@ If you would like to support this project, you have an interesting idea how to i
 
 ## Project architecture
 
-    |-- git-template-full       # main script (init)
-    |-- LICENSE.md              # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
-    |-- README.md               # this simple documentation
-    |-- .gitignore              # ignore untracked files
-    |-- src                     # includes external project files
-        |-- _import_            # external variables and functions
-        |-- configs             # directory with configurations
-            |-- template.cfg    # template configuration
-    |-- doc                     # includes documentation, images and manuals
+    |-- git-template-full          # main script (init)
+    |-- LICENSE.md                 # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
+    |-- README.md                  # this simple documentation
+    |-- .gitignore                 # ignore untracked files
+    |-- src                        # includes external project files
+        |-- _import_               # external variables and functions
+        |-- configs                # directory with configurations
+            |-- template.cfg       # template configuration
+    |-- doc                        # includes documentation, images and manuals
+        |-- man8
+            |-- git-template-full  # man page for git-template-full
 
 ## License
 
