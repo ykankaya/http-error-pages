@@ -35,11 +35,11 @@
 
 
 source ../src/settings
-source ../src/helpers
+source ../src/core
 source ../src/__init__
 
 # We pass arguments to the __main__ function.
 # It is required if you want to run on arguments type $1, $2, ...
 __main__ "$@"
 
-_exit_ 0
+_exit_ "0"
