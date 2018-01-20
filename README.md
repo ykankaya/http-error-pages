@@ -35,6 +35,9 @@ The configuration file (appended with the `-c|--config` parameter) has the follo
 ``````
 # shellcheck shell=bash
 
+# Examples:
+#   - ipaddr=("127.0.0.1")
+ipaddr=("127.0.0.1")
 ``````
 
 ## Requirements
@@ -65,6 +68,13 @@ Verbose mode - displays more detailed information on the screen:
 
 - `--verbose`
 
+## Logging
+
+After running the script, the `log/` directory is created and in it the following files with logs:
+
+* `<script_name>.<date>.log` - all `_logger()` function calls are saved in it
+* `stdout.log` - a standard output and errors from the `_init_cmd()` function are written in it. If you want to redirect the output from command, use the following structure: `your_command >>"$_log_stdout" 2>&1 &`
+
 ## Important
 
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed mollis nunc, sed lacinia ligula. Sed ac ante ipsum. Aliquam molestie, eros sed aliquam cursus, ante ipsum volutpat nisl, at pretium diam lacus at quam. Suspendisse commodo magna eu aliquet fringilla.
@@ -77,7 +87,7 @@ Verbose mode - displays more detailed information on the screen:
 
 ## Contributing
 
-If you are interested in support, you have an interesting idea how to improve the operation of this tool or found some errors - do fork this project, add your fixes and add pull-request of your branch to the testing branch.
+If you would like to support this project, you have an interesting idea how to improve the operation of this tool or if you found some errors - do fork this project, add your fixes and add pull-request of your branch to the **testing branch**.
 
 ## Project architecture
 
