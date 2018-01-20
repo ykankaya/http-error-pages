@@ -90,7 +90,7 @@ readonly _log_path="${_log_directory}/${_log_file}"
 
 # External configuration file (-c|--config script param).
 config=""
-load_state=0
+load_state="0"
 
 # Declaration of output variables (--debug and --verbose params).
 stdout_mode=""
@@ -100,7 +100,7 @@ s_color="true"
 
 # Declaration of total execution time.
 time_tracking="false"
-time_mode=0
+time_mode="0"
 
 
 ################################################################################
@@ -109,14 +109,15 @@ time_mode=0
 
 # We place here used commands at script runtime, as strings to anything
 # unnecessarily run.
-readonly commands=(basename dirname stat date grep egrep cut sed gzip tar)
+readonly commands=("basename" "dirname" "stat" "date" "grep" "egrep" "cut" "sed" \
+                   "gzip" "tar")
 
 # If you intend to specify the full path to the command we do it like:
 # readonly exec_gzip="/bin/gzip"
 
 # Stores the names of the missing commands.
-missing_hash=
-missing_counter=0
+missing_hash=()
+missing_counter="0"
 
 for i in "${commands[@]}" ; do
 
@@ -167,7 +168,7 @@ fi
 function _exit_() {
 
   local _FUNCTION_ID="_exit_"
-  local _STATE=0
+  local _STATE="0"
 
   _STATUS="$1"
 
@@ -213,11 +214,11 @@ function _exit_() {
 function _logger() {
 
   local _FUNCTION_ID="_logger"
-  local _STATE=0
+  local _STATE="0"
 
   local _type="$1"
-  local _to_log
-  local _conv_type
+  local _to_log=""
+  local _conv_type=""
 
   _to_log=$(shift ; echo "$@")
   _conv_type=$(echo "$_type" | tr '[:lower:]' '[:upper:]')
@@ -255,7 +256,7 @@ function _logger() {
   # do not use the _logger function with the 'stop' parameter.
   if [[ "$_type" == "stop" ]] ; then _exit_ 255 ; fi
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -320,14 +321,14 @@ function _get_trap_SIG() {
     # however, it suspended the operation of dracnmap.
     # The lack of this command terminates the process
     # and does not cause the above problems.
-    _STATE=255
+    _STATE="255"
 
   fi
 
   _logger "exit" \
     "$_FUNCTION_ID > ${_SIG_type} (${_STATE})"
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -347,7 +348,7 @@ function _get_trap_SIG() {
 function _sprintf() {
 
   local _FUNCTION_ID="_sprintf"
-  local _STATE=0
+  local _STATE="0"
 
   local _s_type="$1"
   local _s_info="$2"
@@ -392,7 +393,7 @@ function _sprintf() {
       local _sc='-\|/'
 
       # Verify that the process is still running.
-      local _n=0
+      local _n="0"
 
       # shellcheck disable=SC2143
       while [[ $(ps a | awk '{print $1}' | grep -w "$_pid") ]] ; do
@@ -470,7 +471,7 @@ function _sprintf() {
 
   fi
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -490,7 +491,7 @@ function _sprintf() {
 function _init_cmd() {
 
   local _FUNCTION_ID="_init_cmd"
-  local _STATE=0
+  local _STATE="0"
 
   local _cmd="$1"
 
@@ -502,17 +503,17 @@ function _init_cmd() {
     "init: $_cmd"
 
   # Execute command and exit save to file.
-  $_cmd >>"$_log_stdout" 2>&1 &
+  "$_cmd" >>"$_log_stdout" 2>&1 &
 
   # We keep pid of the last command.
-  _pid=$!
+  _pid="$!"
 
   # When the '(command) &' command is performed.
   _sprintf "spin" "$_pid"
 
   # Very important line:
   # We define the state of the output job from the background.
-  wait $_pid &>/dev/null && _state="0" || _state="1"
+  wait "$_pid" &>/dev/null && _state="0" || _state="1"
 
   if [[ "$_state" -eq 0 ]] ; then
 
@@ -530,9 +531,9 @@ function _init_cmd() {
 
   fi
 
-  _STATE=$_state
+  _STATE="$_state"
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -554,7 +555,7 @@ function _init_cmd() {
 function _load() {
 
   local _FUNCTION_ID="_load"
-  local _STATE=0
+  local _STATE="0"
 
   local _type="$1"
   local _filename="$2"
@@ -599,7 +600,7 @@ function _load() {
 
   fi
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -619,7 +620,7 @@ function _load() {
 function _help_() {
 
   local _FUNCTION_ID="_help_"
-  local _STATE=0
+  local _STATE="0"
 
   printf "%s" "
   Usage:
@@ -643,7 +644,7 @@ function _help_() {
 
 "
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -670,7 +671,7 @@ function _help_() {
 function _before_init() {
 
   local _FUNCTION_ID="_before_init"
-  local _STATE=0
+  local _STATE="0"
 
   cd "$_init_directory" || \
   _logger "stop" \
@@ -679,7 +680,7 @@ function _before_init() {
 
   : >"$_log_stdout"
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -701,14 +702,14 @@ function _before_init() {
 function _after_init() {
 
   local _FUNCTION_ID="_after_init"
-  local _STATE=0
+  local _STATE="0"
 
   cd "$_init_directory" || \
   _logger "stop" \
     "${_FUNCTION_ID}()" \
     "directory change error: '$_init_directory'"
 
-  return $_STATE
+  return "$_STATE"
 
 }
 
@@ -720,7 +721,7 @@ function _after_init() {
 function __main__() {
 
   local _FUNCTION_ID="__main__"
-  local _STATE=0
+  local _STATE="0"
 
   _logger "init" \
     "init '${_init_name}' in '${_init_directory}'" && \
@@ -749,7 +750,7 @@ function __main__() {
 
   # Ends an error if the parameter or its argument is not valid.
   _getopt_state="$?"
-  if [ $_getopt_state != 0 ] ; then
+  if [ "$_getopt_state" != 0 ] ; then
     _exit_ 1
   # Ends if no parameter is specified.
   elif [[ "${#__script_params[@]}" -eq 0 ]] ; then
@@ -781,15 +782,15 @@ function __main__() {
 
       --time)
 
-        export time_mode=1
+        export time_mode="1"
 
         shift ;;
 
       -c|--config)
 
-        export load_state=1
+        export load_state="1"
 
-        export config=${2:-"$config"}
+        export config="${2}"
 
         shift 2 ;;
 
@@ -909,7 +910,7 @@ function __main__() {
 
   fi
 
-  return $_STATE
+  return "$_STATE"
 
 }
 

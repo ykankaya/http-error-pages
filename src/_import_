@@ -29,13 +29,13 @@ export _cmdtime_state=0
 function _init_function() {
 
   local _FUNCTION_ID="_init_function"
-  local _STATE=0
+  local _STATE="0"
 
   local _args=("$@")
 
-  local _cmd_begtime=0
-  local _cmd_endtime=0
-  local _cmd_totaltime=0
+  local _cmd_begtime="0"
+  local _cmd_endtime="0"
+  local _cmd_totaltime="0"
 
   _logger "info" \
     "${_FUNCTION_ID}()" \
@@ -48,8 +48,8 @@ function _init_function() {
 
   eval "${_args[@]}" ; if [ ! $? ] ; then _exit_ 255 ; fi
 
-  _num=${#_msg_args[@]}
-  for (( _xa=0 ; _xa<=((_num - 1)) ; _xa++ )) ; do
+  _num="${#_msg_args[@]}"
+  for (( _xa="0" ; _xa<=((_num - 1)) ; _xa++ )) ; do
 
     _msg="${_msg_args[$_xa]}"
     _full_command="${_cmd_args[$_xa]}"
@@ -62,7 +62,7 @@ function _init_function() {
 
     _cmd_begtime=$(date +%s)
 
-    _init_cmd "$_full_command" ; if [ ! $? ] ; then _exit_ 255 ; fi
+    _init_cmd "$_full_command" ; if [ ! "$?" ] ; then _exit_ 255 ; fi
 
     _cmd_endtime=$(date +%s)
 
@@ -84,8 +84,8 @@ function _init_function() {
 
   done
 
-  _cmdtime_state=0
+  _cmdtime_state="0"
 
-  return $_STATE
+  return "$_STATE"
 
 }
