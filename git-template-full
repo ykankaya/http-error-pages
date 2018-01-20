@@ -136,7 +136,9 @@ for i in "${commands[@]}" ; do
 
 done
 
-# Stop the script if you do not find at least one command.
+# It is a good idea to terminate the script at this stage
+# with information for the user to fix the errors if at least one
+# of the required commands in the commands array is not found.
 if [[ "$missing_counter" -gt 0 ]] ; then
 
   printf "not found in PATH: %s\n" "${missing_hash[*]}" >&2
