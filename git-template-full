@@ -273,16 +273,49 @@ function _get_trap_SIG() {
   local _FUNCTION_ID="_get_trap_SIG"
   local _STATE="${_STATUS:-}"
 
-  # Unset variables (e.g. global).
-  # local _to_unset=("$IFS_ORIG" "$IFS_HACK" "$IFS" "$PATH")
-  local _to_unset=("$PATH")
+  local _SIG_type="$1"
 
-  # Running tasks before the end of the script.
-  _after_init
+  # Remember not to duplicate tasks in the _exit_() and _get_trap_SIG()
+  # functions. Tasks for the _exit_() function only work within it
+  # and refer to the exit mechanism. Tasks in the _get_trap_SIG() function
+  # can refer to specific signal or all signals.
 
-  for i in "${_to_unset[@]}" ; do unset i ; done
+  if [ -z "$_STATE" ] ; then _STATE=254
 
-  if [ -z "$_STATE" ] ; then _STATE=255 ; fi
+  # Performs specific actions for the EXIT signal.
+  elif [[ "$_SIG_type" == "EXIT" ]] ; then
+
+    # Unset variables (e.g. global):
+    #   - local _to_unset=("$IFS_ORIG" "$IFS_HACK" "$IFS" "$PATH")
+    local _to_unset=("$PATH")
+
+    # Running tasks before the end of the script.
+    _after_init
+
+    for i in "${_to_unset[@]}" ; do unset i ; done
+
+    # You can cover the code supplied from the _exit_() function
+    # (in this case) or set a new one.
+    _STATE="${_STATUS:-}"
+
+  # Performs specific actions fot the other signals.
+  # In this example, using the SIGS string, we mark several output signals
+  # (see the second example in the description of the function).
+  elif [[ "$_SIG_type" == "SIGS" ]] ; then
+
+    # You can cover the code supplied from the function
+    # or set a new one.
+    _STATE="${_STATUS:-}"
+
+  else
+
+    # In this block the kill command was originally used,
+    # however, it suspended the operation of dracnmap.
+    # The lack of this command terminates the process
+    # and does not cause the above problems.
+    _STATE=255
+
+  fi
 
   _logger "exit" \
     "$_FUNCTION_ID exit > signal $_STATE"
