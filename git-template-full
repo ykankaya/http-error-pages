@@ -742,6 +742,11 @@ function __main__() {
   _GETOPT_PARAMS=$(getopt -o "${_short_opt}" --long "${_long_opt}" \
                    -n "${_init_name}" -- "${__script_params[@]}")
 
+  # With this structure, in the case of problems with the parameters placed
+  # in the _GETOPT_PARAMS variable we finish the script. Keep this in mind
+  # because it has some consequences - the __main __() function will not be
+  # executed.
+
   # Ends an error if the parameter or its argument is not valid.
   _getopt_state="$?"
   if [ $_getopt_state != 0 ] ; then
