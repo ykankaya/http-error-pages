@@ -167,7 +167,7 @@ function _exit_() {
   local _FUNCTION_ID="_exit_"
   local _STATE=0
 
-  local _STATUS="$1"
+  _STATUS="$1"
 
   # Remember that for it a trap is executed that intercepts
   # the exit command (at the end of this function).
@@ -257,13 +257,15 @@ function _logger() {
 #
 # Description:
 #   Ensuring they always perform necessary cleanup operations,
-#   even when something unexpected goes wrong.
+#   even when something unexpected goes wrong. It can handle
+#   all output signals.
 #
 # Usage:
 #   trap _get_trap_SIG SIGNAL
 #
 # Examples:
 #   trap _get_trap_SIG EXIT
+#   trap "_get_trap_SIG SIGS" SIGHUP SIGTERM
 #
 
 function _get_trap_SIG() {
