@@ -34,9 +34,9 @@
 ### END SCRIPT INFO
 
 
-source ../src/settings
-source ../src/helpers
-source ../src/__init__
+source src/settings
+source src/helpers
+source src/__init__
 
 # We pass arguments to the __main__ function.
 # It is required if you want to run on arguments type $1, $2, ...
