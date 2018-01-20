@@ -48,6 +48,7 @@ function __main__() {
   # Declaration of total execution time.
   time_tracking="false"
   time_mode="0"
+  export _cmdtime_state="0"
 
 
   ################################################################################
