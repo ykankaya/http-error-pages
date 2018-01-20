@@ -75,13 +75,16 @@ Verbose mode - displays more detailed information on the screen:
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed mollis nunc, sed lacinia ligula. Sed ac ante ipsum. Aliquam molestie, eros sed aliquam cursus, ante ipsum volutpat nisl, at pretium diam lacus at quam. Suspendisse commodo magna eu aliquet fringilla.
 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed mollis nunc, sed lacinia ligula. Sed ac ante ipsum. Aliquam molestie, eros sed aliquam cursus, ante ipsum volutpat nisl, at pretium diam lacus at quam. Suspendisse commodo magna eu aliquet fringilla.
 
+## Contributions
+
+If you are interested in support, you have an interesting idea how to improve the operation of this tool or found some errors - do fork this project, add your fixes and add pull-request of your branch to the testing branch of this project.
+
 ## Project architecture
 
     |-- git-template-full       # main script (init)
     |-- LICENSE.md              # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
     |-- README.md               # this simple documentation
     |-- .gitignore              # ignore untracked files
-    |-- .gitkeep                # track empty directory
     |-- src                     # includes external project files
         |-- _import_            # external variables and functions
         |-- configs             # directory with configurations
