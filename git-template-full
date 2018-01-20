@@ -826,7 +826,7 @@ function __main__() {
   #   - variables from the additional configuration files
   for i in "${_opt_params[@]}" ; do
 
-    _i="" ; eval _i='$'$i
+    _i="" ; eval _i='$'"$i"
 
     _logger "info" \
       "${_FUNCTION_ID}()" \
