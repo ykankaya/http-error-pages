@@ -834,25 +834,29 @@ function __main__() {
   # Checking the value of the variables (if they are unset or empty):
   #   - variables for call parameters
   #   - variables from the additional configuration files
-  for i in "${_opt_params[@]}" ; do
+  if [[ "${#_opt_params[@]}" -ne 0 ]] ; then
 
-    _i="" ; eval _i='$'"$i"
+    for i in "${_opt_params[@]}" ; do
 
-    _logger "info" \
-      "${_FUNCTION_ID}()" \
-      "$i: '$_i'"
+      _i="" ; eval _i='$'"$i"
 
-    if [[ -z "$_i" ]] ; then
-
-      _sprintf "stop" "error of argument value: '$i' is unset or empty"
-
-      _logger "stop" \
+      _logger "info" \
         "${_FUNCTION_ID}()" \
-        "error of argument value: '$i' is unset or empty"
+        "$i: '$_i'"
 
-    fi
+      if [[ -z "$_i" ]] ; then
 
-  done
+        _sprintf "stop" "error of argument value: '$i' is unset or empty"
+
+        _logger "stop" \
+          "${_FUNCTION_ID}()" \
+          "error of argument value: '$i' is unset or empty"
+
+      fi
+
+    done
+
+  fi
 
   # Checking the relationship between call parameters.
   if [[ "$time_mode" -eq 1 ]] ; then
