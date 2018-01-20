@@ -574,7 +574,7 @@ function _load() {
     . "$_filename" && \
     _logger "info" \
       "${_FUNCTION_ID}()" \
-      "loading configuration file: '$_filename'"
+      "configuration file: '$_filename'"
 
   elif [ -z "$_filename" ] ; then
 
