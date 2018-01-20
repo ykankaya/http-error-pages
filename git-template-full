@@ -320,7 +320,7 @@ function _get_trap_SIG() {
   fi
 
   _logger "exit" \
-    "$_FUNCTION_ID $_SIG_type > signal $_STATE"
+    "$_FUNCTION_ID > ${_SIG_type} (${_STATE})"
 
   return $_STATE
 
