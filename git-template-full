@@ -916,7 +916,6 @@ function __main__() {
 
 trap "_get_trap_SIG EXIT" EXIT
 
-# Trap the SIGKILL signal prevents the console from hanging when you press ctrl+c.
 # shellcheck disable=SC2173
 # trap "_get_trap_SIG SIGS" SIGHUP SIGTERM SIGKILL SIGINT
 
