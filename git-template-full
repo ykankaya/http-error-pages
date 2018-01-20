@@ -162,7 +162,30 @@ fi
 #   _exit_ 0
 #
 
-function _exit_() { _STATUS="$1" ; exit "$_STATUS" ; }
+function _exit_() {
+
+  local _FUNCTION_ID="_exit_"
+  local _STATE=0
+
+  local _STATUS="$1"
+
+  # Remember that for it a trap is executed that intercepts
+  # the exit command (at the end of this function).
+  if [[ "$_STATUS" -eq 0 ]] ; then
+
+    # Add tasks when exiting the code is equal 0.
+    true
+
+  else
+
+    # Add tasks when exiting the code is non equal 0.
+    false
+
+  fi
+
+  exit "$_STATUS"
+
+}
 
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: _logger()
