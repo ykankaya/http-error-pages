@@ -809,6 +809,16 @@ function __main__() {
 
   done
 
+  # If you run the script in debug mode, the information
+  # will be displayed on the screen from this point.
+  if [[ "$stdout_mode" == "debug" ]] ; then
+
+    _logger "info" \
+      "${_FUNCTION_ID}()" \
+      "starting debug mode"
+
+  fi
+
   # Running tasks before start user functions.
   _before_init
 
