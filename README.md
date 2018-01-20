@@ -89,6 +89,18 @@ After running the script, the `log/` directory is created and in it the followin
 
 If you would like to support this project, you have an interesting idea how to improve the operation of this tool or if you found some errors - do fork this project, add your fixes and add pull-request of your branch to the **testing branch**.
 
+### Pull requests
+
+When creating pull request, please heed the following:
+
+- Base your code on the latest master branch to avoid manual merges
+- Code review may ensue in order to help shape your proposal
+- Explain the problem and your proposed solution
+
+### Shellcheck
+
+One of the requirements before approving your changes is to check them with the **shellcheck** utility. If the returned errors are not critical (eg. [SC2154](https://github.com/koalaman/shellcheck/wiki/SC2154)) you can use the `shellcheck disable=SC2154` design.
+
 ## Project architecture
 
     |-- git-template-full          # main script (init)
