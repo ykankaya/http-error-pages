@@ -7,9 +7,8 @@ function __main__() {
   local _FUNCTION_ID="__main__"
   local _STATE="0"
 
-  ################################################################################
-  ############################### Global variables ###############################
-  ################################################################################
+  if [[ "$time_tracking" == "true" ]] ; then
+    _begtime=$(date +%s) ; fi
 
   # The tables that store call parameters.
   __init_params=()
@@ -17,20 +16,17 @@ function __main__() {
 
   # Store the name of the script and directory call.
   readonly _init_name="$(basename "$0")"
-  readonly _init_directory="$(dirname "$(readlink -f "$0")")/.."
+  readonly _init_directory="$(dirname "$(readlink -f "$0")")"
 
   # Directory structure.
-  readonly _src_directory="${_init_directory}/src"
-
-  # File with external (user) functions and variables.
-  readonly _import_="${_src_directory}/_import_"
+  readonly _src_directory="${_init_directory}/../src"
 
   # Stores the current date.
   readonly _cdate=$(date +%Y%m%d)
 
   # Variables related to the log file. Divided into three parts due
   # to the better possibility of manipulation for the user.
-  readonly _log_directory="${_init_directory}/log"
+  readonly _log_directory="${_init_directory}/../log"
   readonly _log_file="${_init_name}.${_cdate}.log"
   readonly _log_stdout="${_log_directory}/stdout.log"
   readonly _log_path="${_log_directory}/${_log_file}"
@@ -50,23 +46,10 @@ function __main__() {
   time_mode="0"
   export _cmdtime_state="0"
 
-
-  ################################################################################
-  ########################### Include external files #############################
-  ################################################################################
-
-  # Include _import_:
-  source ../src/_import
-
-
-  ################################################################################
-  ############################## External commands ###############################
-  ################################################################################
-
   # We place here used commands at script runtime, as strings to anything
   # unnecessarily run.
-  readonly commands=("basename" "dirname" "stat" "date" "grep" "egrep" "cut" "sed" \
-                     "gzip" "tar")
+  readonly commands=("basename" "dirname" "stat" "date" "grep" "egrep" "cut" \
+                     "sed" "gzip" "tar")
 
   # If you intend to specify the full path to the command we do it like:
   # readonly exec_gzip="/bin/gzip"
@@ -103,22 +86,14 @@ function __main__() {
 
   fi
 
-  trap "_get_trap_SIG EXIT" EXIT
-
-  # shellcheck disable=SC2173
-  # trap "_get_trap_SIG SIGS" SIGHUP SIGTERM SIGKILL SIGINT
-
   _logger "init" \
     "init '${_init_name}' in '${_init_directory}'" && \
   _logger "info" \
     "__init_params[] = (${__init_params[*]})," \
     "__script_params[] = (${__script_params[*]})"
 
-  if [[ "$time_tracking" == "true" ]] ; then
-    _begtime=$(date +%s) ; fi
-
   # Include src/_import_ file.
-  _load "null" "$_import_"
+  # _load "null" "$_import_"
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
