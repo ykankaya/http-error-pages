@@ -43,78 +43,6 @@ function _exit_() {
 }
 
 # ``````````````````````````````````````````````````````````````````````````````
-# Function name: _logger()
-#
-# Description:
-#   Saving selected operation states to a log file
-#   and allows you to terminate the script with 'stop' signal.
-#
-#   Four states of message type:
-#     info - normal information
-#     head - normal information (header)
-#     warn - warning information
-#     stop - interrupts script execution
-#
-# Usage:
-#   _logger "type" "message"
-#
-# Examples:
-#   _logger "info" "load config file properly"
-#   _logger "stop" "not connected"
-#
-
-function _logger() {
-
-  local _FUNCTION_ID="_logger"
-  local _STATE="0"
-
-  local _type="$1"
-  local _to_log=""
-  local _conv_type=""
-
-  _to_log=$(shift ; echo "$@")
-  _conv_type=$(echo "$_type" | tr '[:lower:]' '[:upper:]')
-
-  # shellcheck disable=SC2154
-  if [[ ! -d "$_log_directory" && ! -L "$_log_directory" ]] ; then
-    mkdir -p "$_log_directory" ; fi
-
-  # Normal debug mode (output the same as the contents of the log file).
-  # shellcheck disable=SC2154
-  if [[ "$stdout_mode" == "debug" ]] ; then
-
-    printf "%s  %s:  [%s] %s\n" \
-           "$(date +"%d/%m/%y %X")" \
-           "$_init_name" \
-           "$_conv_type" \
-           "$_to_log" \
-           | tee -a "$_log_path"
-
-  # The decision whether an INFO is to be only log to a file
-  # or to a file and to standard output.
-  else
-
-    printf "%s  %s:  [%s] %s\n" \
-           "$(date +"%d/%m/%y %X")" \
-           "$_init_name" \
-           "$_conv_type" \
-           "$_to_log" \
-           >>"$_log_path"
-
-  fi
-
-  # By means of this construction, we can terminate the operation
-  # of the script with the action of logging into the log file.
-  # This do not have to remember to place the _exit_ <value> function
-  # in 'exit' script points. If you prefer to have more control,
-  # do not use the _logger function with the 'stop' parameter.
-  if [[ "$_type" == "stop" ]] ; then _exit_ 255 ; fi
-
-  return "$_STATE"
-
-}
-
-# ``````````````````````````````````````````````````````````````````````````````
 # Function name: _get_trap_SIG()
 #
 # Description:
@@ -182,6 +110,78 @@ function _get_trap_SIG() {
 
   _logger "exit" \
     "$_FUNCTION_ID > ${_SIG_type} (${_STATE})"
+
+  return "$_STATE"
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: _logger()
+#
+# Description:
+#   Saving selected operation states to a log file
+#   and allows you to terminate the script with 'stop' signal.
+#
+#   Four states of message type:
+#     info - normal information
+#     head - normal information (header)
+#     warn - warning information
+#     stop - interrupts script execution
+#
+# Usage:
+#   _logger "type" "message"
+#
+# Examples:
+#   _logger "info" "load config file properly"
+#   _logger "stop" "not connected"
+#
+
+function _logger() {
+
+  local _FUNCTION_ID="_logger"
+  local _STATE="0"
+
+  local _type="$1"
+  local _to_log=""
+  local _conv_type=""
+
+  _to_log=$(shift ; echo "$@")
+  _conv_type=$(echo "$_type" | tr '[:lower:]' '[:upper:]')
+
+  # shellcheck disable=SC2154
+  if [[ ! -d "$_log_directory" && ! -L "$_log_directory" ]] ; then
+    mkdir -p "$_log_directory" ; fi
+
+  # Normal debug mode (output the same as the contents of the log file).
+  # shellcheck disable=SC2154
+  if [[ "$stdout_mode" == "debug" ]] ; then
+
+    printf "%s  %s:  [%s] %s\n" \
+           "$(date +"%d/%m/%y %X")" \
+           "$_init_name" \
+           "$_conv_type" \
+           "$_to_log" \
+           | tee -a "$_log_path"
+
+  # The decision whether an INFO is to be only log to a file
+  # or to a file and to standard output.
+  else
+
+    printf "%s  %s:  [%s] %s\n" \
+           "$(date +"%d/%m/%y %X")" \
+           "$_init_name" \
+           "$_conv_type" \
+           "$_to_log" \
+           >>"$_log_path"
+
+  fi
+
+  # By means of this construction, we can terminate the operation
+  # of the script with the action of logging into the log file.
+  # This do not have to remember to place the _exit_ <value> function
+  # in 'exit' script points. If you prefer to have more control,
+  # do not use the _logger function with the 'stop' parameter.
+  if [[ "$_type" == "stop" ]] ; then _exit_ 255 ; fi
 
   return "$_STATE"
 
