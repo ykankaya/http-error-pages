@@ -2,8 +2,10 @@
 
 ## Version
 
-Stable release: **v1.0.0**  
-Testing release: **testing**
+|            | STABLE RELEASE | TESTING RELEASE |
+| ---------- | -------------- | --------------- |
+| **Tag**    | **v1.0.0**     |                 |
+| **Branch** | master         | testing         |
 
 ## Description
 
