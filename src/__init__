@@ -85,7 +85,7 @@ function __main__() {
   if [[ "$missing_counter" -gt 0 ]] ; then
 
     printf "not found in PATH: %s\n" "${missing_hash[*]}" >&2
-    exit 1
+    _exit_ "1"
 
   fi
 
@@ -114,10 +114,10 @@ function __main__() {
   # Ends an error if the parameter or its argument is not valid.
   _getopt_state="$?"
   if [ "$_getopt_state" != 0 ] ; then
-    _exit_ 1
+    _exit_ "1"
   # Ends if no parameter is specified.
   elif [[ "${#__script_params[@]}" -eq 0 ]] ; then
-    _exit_ 0
+    _exit_ "0"
   fi
 
   eval set -- "$_GETOPT_PARAMS"
@@ -129,7 +129,7 @@ function __main__() {
 
         _help_
 
-        shift ; _exit_ 0 ;;
+        shift ; _exit_ "0" ;;
 
       --debug)
 
@@ -162,7 +162,7 @@ function __main__() {
         if [[ "$2" == "-" ]] || [[ ! -z "$2" ]] ; then
 
           printf "%s: invalid option -- '%s'\n" "$_init_name" "$2"
-          _exit_ 1
+          _exit_ "1"
 
         # elif [[ -z "$2" ]] ; then break ; fi
         else break ; fi

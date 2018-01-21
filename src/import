@@ -1,1 +1,3 @@
+# shellcheck shell=bash
+
 ### Import from ../lib.
