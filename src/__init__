@@ -99,8 +99,8 @@ function __main__() {
     "__init_params[] = (${__init_params[*]})," \
     "__script_params[] = (${__script_params[*]})"
 
-  # Include src/_import_ file.
-  _load "null" "$_import_"
+  # Include src/import file.
+  _load "null" "$_import_path"
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
