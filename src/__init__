@@ -22,6 +22,7 @@ function __main__() {
 
   # Directory structure.
   readonly _src_directory="${_init_directory}/../src"
+  readonly _lib_directory="${_init_directory}/../lib"
 
   # Stores the current date.
   readonly _cdate=$(date +%Y%m%d)
@@ -32,6 +33,9 @@ function __main__() {
   readonly _log_file="${_init_name}.${_cdate}.log"
   readonly _log_stdout="${_log_directory}/stdout.log"
   readonly _log_path="${_log_directory}/${_log_file}"
+
+  # Path to import file.
+  readonly _import_path="${_init_directory}/import"
 
   # External configuration file (-c|--config script param).
   config=""
@@ -96,7 +100,7 @@ function __main__() {
     "__script_params[] = (${__script_params[*]})"
 
   # Include src/_import_ file.
-  # _load "null" "$_import_"
+  _load "null" "$_import_"
 
   # Specifies the call parameters of the script, the exact description
   # can be found in _help_ and file README.md.
