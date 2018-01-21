@@ -24,3 +24,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 #   0027 - for better security than above
 #   0077 - only for user access (more restrictive)
 umask 0027
+
+trap "_get_trap_SIG EXIT" EXIT
+
+# shellcheck disable=SC2173
+# trap "_get_trap_SIG SIGS" SIGHUP SIGTERM SIGKILL SIGINT
