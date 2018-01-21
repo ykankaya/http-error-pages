@@ -9,9 +9,6 @@ function __main__() {
   local _FUNCTION_ID="__main__"
   local _STATE="0"
 
-  if [[ "$time_tracking" == "true" ]] ; then
-    _begtime=$(date +%s) ; fi
-
   # The tables that store call parameters.
   __init_params=()
   __script_params=("$@")
@@ -95,6 +92,9 @@ function __main__() {
     _exit_ "1"
 
   fi
+
+  if [[ "$time_tracking" == "true" ]] ; then
+    _begtime=$(date +%s) ; fi
 
   _logger "init" \
     "init '${_init_name}' in '${_init_directory}'" && \
