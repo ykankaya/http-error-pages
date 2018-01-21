@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 ################################################################################
 ####################### Definitions of global functions ########################
 ################################################################################
@@ -73,10 +75,12 @@ function _logger() {
   _to_log=$(shift ; echo "$@")
   _conv_type=$(echo "$_type" | tr '[:lower:]' '[:upper:]')
 
+  # shellcheck disable=SC2154
   if [[ ! -d "$_log_directory" && ! -L "$_log_directory" ]] ; then
     mkdir -p "$_log_directory" ; fi
 
   # Normal debug mode (output the same as the contents of the log file).
+  # shellcheck disable=SC2154
   if [[ "$stdout_mode" == "debug" ]] ; then
 
     printf "%s  %s:  [%s] %s\n" \
@@ -150,6 +154,7 @@ function _get_trap_SIG() {
     # Running tasks before the end of the script.
     _after_init
 
+    # shellcheck disable=SC2034
     for i in "${_to_unset[@]}" ; do unset i ; done
 
     # You can cover the code supplied from the _exit_() function
@@ -264,6 +269,7 @@ function _sprintf() {
       # - spinner completed
 
       # If verbose mode is enabled, display info message.
+      # shellcheck disable=SC2154
       if [[ "$printf_mode" == "verbose" ]] && [[ "$_s_type" == "info" ]] ; then
 
         printf '[\e['${s_trgb}'m%s\e[m] %s\n' "$s_char" "$_s_info"
@@ -271,6 +277,7 @@ function _sprintf() {
       else
 
         # If not, just display only the head, warn or stop string.
+        # shellcheck disable=SC2154
         if [[ "$_s_type" == "head" ]] ; then
 
           if [[ "$s_color" == "true" ]] ; then
@@ -353,6 +360,7 @@ function _init_cmd() {
     "init: $_cmd"
 
   # Execute command and exit save to file.
+  # shellcheck disable=SC2154
   "$_cmd" >>"$_log_stdout" 2>&1 &
 
   # We keep pid of the last command.
@@ -520,9 +528,11 @@ function _help_() {
 
 function _before_init() {
 
+  # shellcheck disable=SC2154
   local _FUNCTION_ID="_before_init"
   local _STATE="0"
 
+  # shellcheck disable=SC2154
   cd "$_init_directory" || \
   _logger "stop" \
     "${_FUNCTION_ID}()" \
