@@ -1,29 +1,32 @@
 #!/usr/bin/env bash
 
-printf "%s" "Create symbolic link to /usr/local/bin: "
+# To adapt this script to your project, do the following:
+#   - vim: ESC:%s/git-template-full/your-project/g
+#   - sed: set -i 's/git-template-full/your-project/g'
 
-if [[ -d "/usr/local/bin" ]] ; then
+printf "%s\n" "Create symbolic link to /usr/local/bin"
 
-  ln -s bin/git-template-full.1 /usr/local/bin
-  printf "%s\n" "done."
+if [[ -e "bin/git-template-full" ]] ; then
 
-else
+  if [[ ! -e "/usr/local/bin/git-template-full" ]] ; then
 
-  printf "%s\n" "fail."
+    ln -s bin/git-template-full /usr/local/bin
+
+  fi
+
+fi
+
+printf "%s\n" "Create man page to /usr/local/man/man8"
+
+if [[ -e "doc/man8/git-template-full.8" ]] ; then
+
+  if [[ ! -e "/usr/local/man/man8/git-template-full.gz" ]] ; then
+
+    cp doc/man8/git-template-full.8 /usr/local/man/man8
+    gzip /usr/local/man/man8/git-template-full.8
+
+  fi
 
 fi
 
-printf "%s" "Create man page to /usr/local/man/man8: "
-
-if [[ -d "/usr/local/man/man8" ]] ; then
-
-  cp doc/man8/git-template-full.8 /usr/local/man/man8
-  gzip /usr/local/man/man8/git-template-full.8
-
-  printf "%s\n" "done."
-
-else
-
-  printf "%s\n" "fail."
-
-fi
+exit 0
