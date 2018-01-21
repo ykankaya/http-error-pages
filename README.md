@@ -2,10 +2,10 @@
 
 ## Releases
 
-|            | STABLE RELEASE | TESTING RELEASE |
-| ---------- | -------------- | --------------- |
-| **Tag**    | **v1.0.0**     |                 |
-| **Branch** | master         | testing         |
+| STABLE RELEASE                           | TESTING RELEASE                          |
+| ---------------------------------------- | ---------------------------------------- |
+| [![](https://img.shields.io/badge/Branch-master-brightgreen.svg)]() | [![](https://img.shields.io/badge/Branch-testing-red.svg)]() |
+| [![](https://img.shields.io/badge/Version-v1.0.0-lightgrey.svg)]() |                                          |
 
 ## Description
 
@@ -93,17 +93,26 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Project architecture
 
-    |-- git-template-full          # main script (init)
     |-- LICENSE.md                 # GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
     |-- README.md                  # this simple documentation
+    |-- CONTRIBUTING.md            # principles of project support
     |-- .gitignore                 # ignore untracked files
-    |-- src                        # includes external project files
-        |-- _import_               # external variables and functions
-        |-- configs                # directory with configurations
-            |-- template.cfg       # template configuration
+    |-- setup.sh                   # install git-template-full on the system
+    |-- bin
+        |-- git-template-full      # main script (init)
     |-- doc                        # includes documentation, images and manuals
         |-- man8
             |-- git-template-full  # man page for git-template-full
+    |-- lib                        # libraries, external functions
+    |-- log                        # contains logs, created after init
+    |-- src                        # includes external project files
+        |-- helpers                # contains core functions
+        |-- import                 # appends the contents of the lib directory
+        |-- __init__               # contains the __main__ function
+        |-- settings               # contains git-template-full settings
+    |-- templates                  # contains examples and template files
+        |-- user-config.cfg        # example of user config file
+    |-- tmp                        # contains temporary files (mktemp)
 
 ## License
 
