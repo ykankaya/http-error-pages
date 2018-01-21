@@ -37,9 +37,9 @@ elif [[ "$1" == "uninstall" ]] ; then
 
   printf "%s\n" "Remove symbolic link from /usr/local/bin"
 
-  if [[ -e "/usr/local/bin/git-template-full" ]] ; then
+  if [[ -L "/usr/local/bin/git-template-full" ]] ; then
 
-    unlink "/usr/local/bin/git-template-full"
+    unlink /usr/local/bin/git-template-full
 
   fi
 
@@ -47,7 +47,7 @@ elif [[ "$1" == "uninstall" ]] ; then
 
   if [[ -e "/usr/local/man/man8/git-template-full.8.gz" ]] ; then
 
-    rm "/usr/local/man/man8/git-template-full.8.gz"
+    rm /usr/local/man/man8/git-template-full.8.gz
 
   fi
 
