@@ -17,8 +17,8 @@ printf "%s" "Create man page to /usr/local/man/man8: "
 
 if [[ -d "/usr/local/man/man8" ]] ; then
 
-  cp doc/man8/git-template-full.1 /usr/local/man/man8
-  gzip /usr/local/man/man8/git-template-full.1
+  cp doc/man8/git-template-full.8 /usr/local/man/man8
+  gzip /usr/local/man/man8/git-template-full.8
 
   printf "%s\n" "done."
 
