@@ -39,7 +39,7 @@ elif [[ "$1" == "uninstall" ]] ; then
 
   if [[ -e "/usr/local/bin/git-template-full" ]] ; then
 
-    rm "/usr/local/bin/git-template-full"
+    unlink "/usr/local/bin/git-template-full"
 
   fi
 
