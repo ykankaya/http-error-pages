@@ -1,6 +1,6 @@
 # git-template-full
 
-## Version
+## Releases
 
 |            | STABLE RELEASE | TESTING RELEASE |
 | ---------- | -------------- | --------------- |
