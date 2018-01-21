@@ -20,22 +20,25 @@ function __main__() {
   readonly _init_name="$(basename "$0")"
   readonly _init_directory="$(dirname "$(readlink -f "$0")")"
 
+  # Set root directory.
+  readonly _rel_path="${_init_directory}/.."
+
   # Directory structure.
-  readonly _src_directory="${_init_directory}/../src"
-  readonly _lib_directory="${_init_directory}/../lib"
+  readonly _src_directory="${_rel_path}/src"
+  readonly _lib_directory="${_rel_path}/lib"
 
   # Stores the current date.
   readonly _cdate=$(date +%Y%m%d)
 
   # Variables related to the log file. Divided into three parts due
   # to the better possibility of manipulation for the user.
-  readonly _log_directory="${_init_directory}/../log"
+  readonly _log_directory="${_rel_path}/log"
   readonly _log_file="${_init_name}.${_cdate}.log"
   readonly _log_stdout="${_log_directory}/stdout.log"
   readonly _log_path="${_log_directory}/${_log_file}"
 
   # Path to import file.
-  readonly _import_path="${_init_directory}/import"
+  readonly _import_path="${_rel_path}/import"
 
   # External configuration file (-c|--config script param).
   config=""
@@ -99,7 +102,7 @@ function __main__() {
     "__init_params[] = (${__init_params[*]})," \
     "__script_params[] = (${__script_params[*]})"
 
-  # Include src/import file.
+  # Include import file.
   _load "null" "$_import_path"
 
   # Specifies the call parameters of the script, the exact description
