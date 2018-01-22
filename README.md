@@ -97,6 +97,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
     |-- README.md                  # this simple documentation
     |-- CONTRIBUTING.md            # principles of project support
     |-- .gitignore                 # ignore untracked files
+    |-- .travis.yml                # continuous integration with Travis CI
     |-- setup.sh                   # install git-template-full on the system
     |-- bin
         |-- git-template-full      # main script (init)
