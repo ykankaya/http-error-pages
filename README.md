@@ -49,6 +49,23 @@ ipaddr=("127.0.0.1")
 
 - link-to-external-tool
 
+## Install/uninstall
+
+It's simple - for install:
+
+``````
+./setup.sh install
+``````
+
+For remove:
+
+``````
+./setup.sh uninstall
+``````
+
+> * symlink to `bin/git-template-full` is placed in `/usr/local/bin`
+> * man page is placed in `/usr/local/man/man8`
+
 ## Use example
 
 > Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed mollis nunc, sed lacinia ligula. Sed ac ante ipsum. Aliquam molestie, eros sed aliquam cursus, ante ipsum volutpat nisl, at pretium diam lacus at quam. Suspendisse commodo magna eu aliquet fringilla.
