@@ -2,9 +2,9 @@
 
 ## Releases
 
-| STABLE RELEASE                           | TESTING RELEASE                          |
-| ---------------------------------------- | ---------------------------------------- |
-| [![](https://img.shields.io/badge/Branch-master-brightgreen.svg)]() | [![](https://img.shields.io/badge/Branch-testing-red.svg)]() |
+|            **STABLE RELEASE**            |           **TESTING RELEASE**            |
+| :--------------------------------------: | :--------------------------------------: |
+| [![](https://img.shields.io/badge/Branch-master-green.svg)]() | [![](https://img.shields.io/badge/Branch-testing-orange.svg)]() |
 | [![](https://img.shields.io/badge/Version-v1.0.0-lightgrey.svg)]() | [![](https://img.shields.io/badge/Version-v1.0.0-lightgrey.svg)]() |
 | [![Build Status](https://travis-ci.org/profile/git-template-full.svg?branch=master)](https://travis-ci.org/profile/git-template-full) | [![Build Status](https://travis-ci.org/profile/git-template-full.svg?branch=testing)](https://travis-ci.org/profile/git-template-full) |
 
