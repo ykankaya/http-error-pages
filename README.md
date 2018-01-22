@@ -104,7 +104,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
         |-- git-template-full      # main script (init)
     |-- doc                        # includes documentation, images and manuals
         |-- man8
-            |-- git-template-full  # man page for git-template-full
+            |-- git-template-full.8# man page for git-template-full
     |-- lib                        # libraries, external functions
     |-- log                        # contains logs, created after init
     |-- src                        # includes external project files
