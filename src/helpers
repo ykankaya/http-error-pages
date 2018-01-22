@@ -607,10 +607,10 @@ function _before_init() {
   local _STATE="0"
 
   # shellcheck disable=SC2154
-  cd "$_rel_path" || \
+  cd "$_rel" || \
   _logger "stop" \
     "${_FUNCTION_ID}()" \
-    "directory change error: '$_rel_path'"
+    "directory change error: '$_rel'"
 
   : >"$_log_stdout"
 
@@ -638,10 +638,10 @@ function _after_init() {
   local _FUNCTION_ID="_after_init"
   local _STATE="0"
 
-  cd "$_rel_path" || \
+  cd "$_rel" || \
   _logger "stop" \
     "${_FUNCTION_ID}()" \
-    "directory change error: '$_rel_path'"
+    "directory change error: '$_rel'"
 
   return "$_STATE"
 
