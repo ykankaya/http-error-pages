@@ -41,7 +41,7 @@ function __main__() {
 
   local _param="${__script_params[0]}"
 
-  local _template="templates/_template.html"
+  local _templates="templates"
   local _static="static"
   local _http_code=""
 
@@ -56,6 +56,13 @@ function __main__() {
     readonly _jsonf="src/5xx.json"
     readonly _fdir="${_static}/5xx"
     readonly _fa_img="fas fa-exclamation-triangle red"
+
+  elif [[ "$_param" -eq "other" ]] ; then
+
+    readonly _fdir="${_static}/other"
+
+    cp "${_templates}/_maintenance.html" "${_fdir}/maintenance.html"
+    cp "${_templates}/_invalid-domain.html" "${_fdir}/invalid-domain.html"
 
   else
 
@@ -75,7 +82,7 @@ function __main__() {
     GetData "${i}" "code"
     _http_code="$_msg"
 
-    cp "$_template" "${_fdir}/${_http_code}.html"
+    cp "${_templates}/_template.html" "${_fdir}/${_http_code}.html"
 
     GetData "${i}" "title"
     _http_title="$_msg"
