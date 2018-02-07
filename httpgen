@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# ``````````````````````````````````````````````````````````````````````````````
+# Function name: GetData()
+#
+# Description:
+#   Get data from json file.
+#
+# Usage:
+#   GetData key value
+#
+# Examples:
+#   GetData 1 "message"
+#
+
+function GetData() {
+
+  local _FUNCTION_ID="GetData"
+  local _STATE="0"
+
+  _msg=""
+
+  local _key="$1"
+  local _value="$2"
+
+  export _msg=$(jq -r ".[${_key}].${_value}" ${_fd})
+
+  return "$_STATE"
+
+}
+
+function __main__() {
+
+  local _FUNCTION_ID="__main__"
+  local _STATE="0"
+
+  readonly _fd="templates/_data.json"
+  readonly _template="templates/_template.html"
+
+  local _http_code=""
+
+  GetData "1" "code"
+
+  _http_code="$_msg"
+
+  cp "$_template" "site/${_http_code}.html"
+
+  GetData "1" "title"
+  _http_code+=" $_msg"
+
+  sed -i "s/HTTP_CODE/${_http_code}/g" "site/${_http_code}.html"
+
+  GetData "1" "desc"
+  _http_code+=" $_msg"
+
+  sed -i "s/HTTP_DESCRIPTION/${_http_code}/g" "site/${_http_code}.html"
+
+}
+
+# We pass arguments to the __main__ function.
+# It is required if you want to run on arguments type $1, $2, ...
+__main__ "${__script_params[@]}"
