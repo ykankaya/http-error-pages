@@ -63,6 +63,7 @@ function __main__() {
 
     cp "${_templates}/_maintenance.html" "${_fdir}/maintenance.html"
     cp "${_templates}/_invalid-domain.html" "${_fdir}/invalid-domain.html"
+    cp "${_templates}/_rate-limit.html" "${_fdir}/rate-limit.html"
 
   else
 
