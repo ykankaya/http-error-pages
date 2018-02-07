@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# The array that store call parameters.
+# shellcheck disable=SC2034
+__init_params=()
+__script_params=("$@")
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: GetData()
 #
@@ -34,12 +39,29 @@ function __main__() {
   local _FUNCTION_ID="__main__"
   local _STATE="0"
 
-  local _param="$1"
+  local _param="${__script_params[0]}"
 
-  readonly _fd="templates/_data.json"
-  readonly _template="templates/_template.html"
-
+  local _template="templates/_template.html"
   local _http_code=""
+
+  if [[ "$_param" -eq "400" ]] ; then
+
+    readonly _fd="src/4xx.json"
+    readonly _site="site/4xx"
+
+  elif [[ "$_param" -eq "500" ]] ; then
+
+    readonly _fd="src/5xx.json"
+    readonly _site="site/5xx"
+
+  else
+
+    printf "%s\n" "INFO: unknown param"
+    exit 1
+
+  fi
+
+  mkdir -p ${_site}
 
   local _count=$(jq -r ".[].code" ${_fd} | wc -l)
   local _end=$((_count - 1))
@@ -47,22 +69,21 @@ function __main__() {
   for i in $(seq 0 $_end) ; do
 
     GetData "${i}" "code"
-
     _http_code="$_msg"
 
-    cp "$_template" "site/${_http_code}.html"
+    cp "$_template" "${_site}/${_http_code}.html"
 
     GetData "${i}" "title"
     _http_title="$_msg"
 
-    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "site/${_http_code}.html"
+    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "${_site}/${_http_code}.html"
 
     GetData "${i}" "desc"
     _http_desc="$_msg"
 
-    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "site/${_http_code}.html"
+    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_site}/${_http_code}.html"
 
-    sed "s/^[ \t]*//" -i "site/${_http_code}.html"
+    sed "s/^[ \t]*//" -i "${_site}/${_http_code}.html"
 
   done
 
