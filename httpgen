@@ -47,12 +47,12 @@ function __main__() {
   if [[ "$_param" -eq "400" ]] ; then
 
     readonly _fd="src/4xx.json"
-    readonly _site="site/4xx"
+    readonly _static="static/4xx"
 
   elif [[ "$_param" -eq "500" ]] ; then
 
     readonly _fd="src/5xx.json"
-    readonly _site="site/5xx"
+    readonly _static="static/5xx"
 
   else
 
@@ -61,7 +61,8 @@ function __main__() {
 
   fi
 
-  mkdir -p ${_site}
+  mkdir -p ${_static}
+  cp src/main.css ${_static}
 
   local _count=$(jq -r ".[].code" ${_fd} | wc -l)
   local _end=$((_count - 1))
@@ -71,19 +72,19 @@ function __main__() {
     GetData "${i}" "code"
     _http_code="$_msg"
 
-    cp "$_template" "${_site}/${_http_code}.html"
+    cp "$_template" "${_static}/${_http_code}.html"
 
     GetData "${i}" "title"
     _http_title="$_msg"
 
-    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "${_site}/${_http_code}.html"
+    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "${_static}/${_http_code}.html"
 
     GetData "${i}" "desc"
     _http_desc="$_msg"
 
-    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_site}/${_http_code}.html"
+    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_static}/${_http_code}.html"
 
-    sed "s/^[ \t]*//" -i "${_site}/${_http_code}.html"
+    sed "s/^[ \t]*//" -i "${_static}/${_http_code}.html"
 
   done
 
