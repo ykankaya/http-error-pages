@@ -43,3 +43,13 @@ body {
   padding-right: 42px;
   white-space: pre-line;
 }
+/* Colors */
+.green {
+  color:#5cb85c;
+}
+.orange {
+  color:#f0ad4e;
+}
+.red {
+  color:#d9534f;
+}

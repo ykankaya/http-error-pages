@@ -49,11 +49,13 @@ function __main__() {
 
     readonly _jsonf="src/4xx.json"
     readonly _fdir="${_static}/4xx"
+    readonly _fa_img="fas fa-info-circle orange"
 
   elif [[ "$_param" -eq "500" ]] ; then
 
     readonly _jsonf="src/5xx.json"
     readonly _fdir="${_static}/5xx"
+    readonly _fa_img="fas fa-exclamation-triangle red"
 
   else
 
@@ -84,6 +86,7 @@ function __main__() {
     _http_desc="$_msg"
 
     sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_fdir}/${_http_code}.html"
+    sed -i "s/FA_IMG/${_fa_img}/g" "${_fdir}/${_http_code}.html"
 
     sed "s/^[ \t]*//" -i "${_fdir}/${_http_code}.html"
 
