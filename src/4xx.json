@@ -60,6 +60,11 @@
     "desc": "The request entity has a media type which the server or resource does not support."
   },
   {
+    "code": "420",
+    "title": "Rate Limit",
+    "desc": "The best thing to do is to slow down with your requests and try again in a few minutes."
+  },
+  {
     "code": "429",
     "title": "Too Many Requests",
     "desc": "The user has sent too many requests in a given amount of time. Intended for use with rate-limiting schemes."
