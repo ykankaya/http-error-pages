@@ -57,13 +57,17 @@ function __main__() {
     readonly _fdir="${_static}/5xx"
     readonly _fa_img="fas fa-exclamation-triangle red"
 
-  elif [[ "$_param" -eq "other" ]] ; then
+  elif [[ "$_param" == "other" ]] ; then
 
     readonly _fdir="${_static}/other"
+
+    mkdir -p ${_fdir}
 
     cp "${_templates}/_maintenance.html" "${_fdir}/maintenance.html"
     cp "${_templates}/_invalid-domain.html" "${_fdir}/invalid-domain.html"
     cp "${_templates}/_rate-limit.html" "${_fdir}/rate-limit.html"
+
+    exit 0
 
   else
 
