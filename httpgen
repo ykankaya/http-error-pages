@@ -34,26 +34,37 @@ function __main__() {
   local _FUNCTION_ID="__main__"
   local _STATE="0"
 
+  local _param="$1"
+
   readonly _fd="templates/_data.json"
   readonly _template="templates/_template.html"
 
   local _http_code=""
 
-  GetData "1" "code"
+  local _count=$(jq -r ".[].code" ${_fd} | wc -l)
+  local _end=$((_count - 1))
 
-  _http_code="$_msg"
+  for i in $(seq 0 $_end) ; do
 
-  cp "$_template" "site/${_http_code}.html"
+    GetData "${i}" "code"
 
-  GetData "1" "title"
-  _http_code+=" $_msg"
+    _http_code="$_msg"
 
-  sed -i "s/HTTP_CODE/${_http_code}/g" "site/${_http_code}.html"
+    cp "$_template" "site/${_http_code}.html"
 
-  GetData "1" "desc"
-  _http_code+=" $_msg"
+    GetData "${i}" "title"
+    _http_title="$_msg"
 
-  sed -i "s/HTTP_DESCRIPTION/${_http_code}/g" "site/${_http_code}.html"
+    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "site/${_http_code}.html"
+
+    GetData "${i}" "desc"
+    _http_desc="$_msg"
+
+    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "site/${_http_code}.html"
+
+    sed "s/^[ \t]*//" -i "site/${_http_code}.html"
+
+  done
 
 }
 
