@@ -1,8 +1,0 @@
-[
-  {
-    "id": 1,
-    "code": "400",
-    "title": "Bad Request",
-    "desc": "The server cannot or will not process the request due to an apparent client error\\n(e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing)."
-  },
-]
