@@ -42,24 +42,24 @@ function __main__() {
   local _param="${__script_params[0]}"
 
   local _templates="templates"
-  local _static="static"
+  local _errors="errors"
   local _http_code=""
 
   if [[ "$_param" -eq "400" ]] ; then
 
     readonly _jsonf="src/4xx.json"
-    readonly _fdir="${_static}/4xx"
+    readonly _fdir="${_errors}/4xx"
     readonly _fa_img="fas fa-info-circle orange"
 
   elif [[ "$_param" -eq "500" ]] ; then
 
     readonly _jsonf="src/5xx.json"
-    readonly _fdir="${_static}/5xx"
+    readonly _fdir="${_errors}/5xx"
     readonly _fa_img="fas fa-exclamation-triangle red"
 
   elif [[ "$_param" == "other" ]] ; then
 
-    readonly _fdir="${_static}/other"
+    readonly _fdir="${_errors}/other"
 
     mkdir -p ${_fdir}
 
@@ -67,7 +67,7 @@ function __main__() {
     cp "${_templates}/_invalid-domain.html" "${_fdir}/invalid-domain.html"
     cp "${_templates}/_rate-limit.html" "${_fdir}/rate-limit.html"
 
-    cp src/main.css ${_static}
+    cp src/main.css ${_errors}
 
     exit 0
 
@@ -80,7 +80,7 @@ function __main__() {
 
   mkdir -p ${_fdir}
 
-  cp src/main.css ${_static}
+  cp src/main.css ${_errors}
 
   local _count=$(jq -r ".[].code" ${_jsonf} | wc -l)
   local _end=$((_count - 1))
