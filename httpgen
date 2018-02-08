@@ -110,13 +110,13 @@ function __main__() {
   GenHttpCodes "src/5xx.json" "${_errors}/5xx" "fas fa-exclamation-triangle red"
 
   cp "${_templates}/_maintenance.html" "${_maintenance}/maintenance.html" && \
-  ln -s "${_templates}/_maintenance.html" "${_maintenance}/index.html"
+  cd "${_maintenance}" && ln -s maintenance.html index.html
 
   cp "${_templates}/_invalid-domain.html" "${_invalid_domain}/invalid-domain.html" && \
-  ln -s "${_templates}/_maintenance.html" "${_invalid_domain}/index.html"
+  cd "${_invalid_domain}" && ln -s invalid-domain.html index.html
 
   cp "${_templates}/_rate-limit.html" "${_rate_limit}/rate-limit.html" && \
-  ln -s "${_templates}/_maintenance.html" "${_rate_limit}/index.html"
+  cd "${_rate_limit}" && ln -s rate-limit.html index.html
 
 }
 
