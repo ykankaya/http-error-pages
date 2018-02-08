@@ -6,6 +6,56 @@ __init_params=()
 __script_params=("$@")
 
 # ``````````````````````````````````````````````````````````````````````````````
+# Function name: GenHttpCodes()
+#
+# Description:
+#   Generate http codes.
+#
+# Usage:
+#   GenHttpCodes "json" "dir" "fa"
+#
+# Examples:
+#   GenHttpCodes "src/4xx.json" "${_errors}/4xx" "fas fa-info-circle orange"
+#
+
+function GenHttpCodes() {
+
+  local _jsonf="$1"
+  local _fdir="$2"
+  local _fa_img="$3"
+
+  local _count=$(jq -r ".[].code" ${_jsonf} | wc -l)
+  local _end=$((_count - 1))
+
+  mkdir -p "$_fdir"
+
+  for i in $(seq 0 $_end) ; do
+
+    GetData "${i}" "code"
+    _http_code="$_msg"
+
+    cp "${_templates}/_template.html" "${_fdir}/${_http_code}.html"
+
+    GetData "${i}" "title"
+    _http_title="$_msg"
+
+    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "${_fdir}/${_http_code}.html"
+
+    GetData "${i}" "desc"
+    _http_desc="$_msg"
+
+    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_fdir}/${_http_code}.html"
+    sed -i "s/FA_IMG/${_fa_img}/g" "${_fdir}/${_http_code}.html"
+
+    sed "s/^[ \t]*//" -i "${_fdir}/${_http_code}.html"
+
+  done
+
+  return "$_STATE"
+
+}
+
+# ``````````````````````````````````````````````````````````````````````````````
 # Function name: GetData()
 #
 # Description:
@@ -42,70 +92,26 @@ function __main__() {
   local _param="${__script_params[0]}"
 
   local _templates="templates"
-  local _errors="errors"
+  local _sites="sites"
+  local _errors="${_sites}/errors"
+  local _maintenance="${_sites}/maintenance"
+  local _invalid_domain="${_sites}/invalid-domain"
+  local _rate_limit="${_sites}/rate-limit"
   local _http_code=""
 
-  if [[ "$_param" -eq "400" ]] ; then
+  for i in "${_sites}" "${_errors}" "${_maintenance}" \
+           "${_invalid_domain}" "${_rate_limit}" ; do
 
-    readonly _jsonf="src/4xx.json"
-    readonly _fdir="${_errors}/4xx"
-    readonly _fa_img="fas fa-info-circle orange"
-
-  elif [[ "$_param" -eq "500" ]] ; then
-
-    readonly _jsonf="src/5xx.json"
-    readonly _fdir="${_errors}/5xx"
-    readonly _fa_img="fas fa-exclamation-triangle red"
-
-  elif [[ "$_param" == "other" ]] ; then
-
-    readonly _fdir="${_errors}/other"
-
-    mkdir -p ${_fdir}
-
-    cp "${_templates}/_maintenance.html" "${_fdir}/maintenance.html"
-    cp "${_templates}/_invalid-domain.html" "${_fdir}/invalid-domain.html"
-    cp "${_templates}/_rate-limit.html" "${_fdir}/rate-limit.html"
-
-    cp src/main.css ${_errors}
-
-    exit 0
-
-  else
-
-    printf "%s\n" "INFO: unknown param"
-    exit 1
-
-  fi
-
-  mkdir -p ${_fdir}
-
-  cp src/main.css ${_errors}
-
-  local _count=$(jq -r ".[].code" ${_jsonf} | wc -l)
-  local _end=$((_count - 1))
-
-  for i in $(seq 0 $_end) ; do
-
-    GetData "${i}" "code"
-    _http_code="$_msg"
-
-    cp "${_templates}/_template.html" "${_fdir}/${_http_code}.html"
-
-    GetData "${i}" "title"
-    _http_title="$_msg"
-
-    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "${_fdir}/${_http_code}.html"
-
-    GetData "${i}" "desc"
-    _http_desc="$_msg"
-
-    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_fdir}/${_http_code}.html"
-    sed -i "s/FA_IMG/${_fa_img}/g" "${_fdir}/${_http_code}.html"
-
-    sed "s/^[ \t]*//" -i "${_fdir}/${_http_code}.html"
+    mkdir -p "$i"
 
   done
+
+  GenHttpCodes "src/4xx.json" "${_errors}/4xx" "fas fa-info-circle orange"
+  GenHttpCodes "src/5xx.json" "${_errors}/5xx" "fas fa-exclamation-triangle red"
+
+  cp "${_templates}/_maintenance.html" "${_maintenance}/maintenance.html"
+  cp "${_templates}/_invalid-domain.html" "${_invalid_domain}/invalid-domain.html"
+  cp "${_templates}/_rate-limit.html" "${_rate_limit}/rate-limit.html"
 
 }
 
