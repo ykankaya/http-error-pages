@@ -5,6 +5,10 @@
 __init_params=()
 __script_params=("$@")
 
+# Store the name of the script and directory call.
+readonly _init_name="$(basename "$0")"
+readonly _init_directory="$(dirname "$(readlink -f "$0")")"
+
 # ``````````````````````````````````````````````````````````````````````````````
 # Function name: GenHttpCodes()
 #
@@ -89,6 +93,8 @@ function __main__() {
   local _FUNCTION_ID="__main__"
   local _STATE="0"
 
+  cd "$_init_directory"
+
   local _param="${__script_params[0]}"
 
   local _templates="templates"
@@ -111,12 +117,15 @@ function __main__() {
 
   cp "${_templates}/_maintenance.html" "${_maintenance}/maintenance.html" && \
   cd "${_maintenance}" && ln -s maintenance.html index.html
+  cd "$_init_directory"
 
   cp "${_templates}/_invalid-domain.html" "${_invalid_domain}/invalid-domain.html" && \
   cd "${_invalid_domain}" && ln -s invalid-domain.html index.html
+  cd "$_init_directory"
 
   cp "${_templates}/_rate-limit.html" "${_rate_limit}/rate-limit.html" && \
   cd "${_rate_limit}" && ln -s rate-limit.html index.html
+  cd "$_init_directory"
 
 }
 
