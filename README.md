@@ -12,6 +12,20 @@ Then an example of starting the tool:
 ./httpgen
 ``````
 
+## Error examples
+
+### 404 Not Found
+![alt text](doc/img/404_not_found.png)
+
+### 503 Service Unavailable
+![alt text](doc/img/503_service_unavailable.png)
+
+### Temporary Maintenance
+![alt text](doc/img/temporary_maintenance.png)
+
+### Rate Limit
+![alt text](doc/img/rate_limit.png)
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
