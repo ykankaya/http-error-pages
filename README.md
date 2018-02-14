@@ -49,6 +49,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
             |-- _template.html        # static page for all other errors (eg. 404, 500)
             |-- nginx
                 |-- errors.conf       # config file with error directives
+    |-- doc
+        |-- img                       # error examples
 
 ## License
 
