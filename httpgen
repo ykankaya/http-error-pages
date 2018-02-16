@@ -16,17 +16,16 @@ readonly _init_directory="$(dirname "$(readlink -f "$0")")"
 #   Generate http codes.
 #
 # Usage:
-#   GenHttpCodes "json" "dir" "fa"
+#   GenHttpCodes "json" "dir"
 #
 # Examples:
-#   GenHttpCodes "src/4xx.json" "${_errors}/4xx" "fas fa-info-circle orange"
+#   GenHttpCodes "src/4xx.json" "${_errors}/4xx"
 #
 
 function GenHttpCodes() {
 
   local _jsonf="$1"
   local _fdir="$2"
-  local _fa_img="$3"
 
   local _count=$(jq -r ".[].code" ${_jsonf} | wc -l)
   local _end=$((_count - 1))
@@ -38,19 +37,31 @@ function GenHttpCodes() {
     GetData "${i}" "code"
     _http_code="$_msg"
 
-    cp "${_templates}/_template.html" "${_fdir}/${_http_code}.html"
-
     GetData "${i}" "title"
     _http_title="$_msg"
-
-    sed -i "s/HTTP_CODE/${_http_code} ${_http_title}/g" "${_fdir}/${_http_code}.html"
 
     GetData "${i}" "desc"
     _http_desc="$_msg"
 
-    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_fdir}/${_http_code}.html"
-    sed -i "s/FA_IMG/${_fa_img}/g" "${_fdir}/${_http_code}.html"
+    GetData "${i}" "logo"
+    _http_logo="$_msg"
 
+    if [[ "$_http_code" -ge 900 ]] ; then
+
+      _http_code=$(echo $_http_title | tr '[:upper:]' '[:lower:]' | tr " " "_")
+      _http_full_title="$_http_title"
+
+    else
+
+      _http_full_title="${_http_code} ${_http_title}"
+
+    fi
+
+    cp "${_templates}/_template.html" "${_fdir}/${_http_code}.html"
+
+    sed -i "s/HTTP_CODE/${_http_full_title}/g" "${_fdir}/${_http_code}.html"
+    sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_fdir}/${_http_code}.html"
+    sed -i "s/FA_IMG/${_http_logo}/g" "${_fdir}/${_http_code}.html"
     sed "s/^[ \t]*//" -i "${_fdir}/${_http_code}.html"
 
   done
@@ -99,33 +110,13 @@ function __main__() {
 
   local _templates="templates"
   local _sites="sites"
-  local _errors="${_sites}/errors"
-  local _maintenance="${_sites}/maintenance"
-  local _invalid_domain="${_sites}/invalid-domain"
-  local _rate_limit="${_sites}/rate-limit"
   local _http_code=""
 
-  for i in "${_sites}" "${_errors}" "${_maintenance}" \
-           "${_invalid_domain}" "${_rate_limit}" ; do
+  mkdir -p "$_sites"
 
-    mkdir -p "$i"
-
-  done
-
-  GenHttpCodes "src/4xx.json" "${_errors}/4xx" "fas fa-info-circle orange"
-  GenHttpCodes "src/5xx.json" "${_errors}/5xx" "fas fa-exclamation-triangle red"
-
-  cp "${_templates}/_maintenance.html" "${_maintenance}/maintenance.html" && \
-  cd "${_maintenance}" && ln -s maintenance.html index.html
-  cd "$_init_directory"
-
-  cp "${_templates}/_invalid-domain.html" "${_invalid_domain}/invalid-domain.html" && \
-  cd "${_invalid_domain}" && ln -s invalid-domain.html index.html
-  cd "$_init_directory"
-
-  cp "${_templates}/_rate-limit.html" "${_rate_limit}/rate-limit.html" && \
-  cd "${_rate_limit}" && ln -s rate-limit.html index.html
-  cd "$_init_directory"
+  GenHttpCodes "src/4xx.json" "${_sites}/errors/4xx"
+  GenHttpCodes "src/5xx.json" "${_sites}/errors/5xx"
+  GenHttpCodes "src/other.json" "${_sites}/other"
 
 }
 
