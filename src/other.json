@@ -3,18 +3,18 @@
     "code": "900",
     "title": "Invalid Domain",
     "desc": "This domain is unsupported by the server.",
-    "logo": "fas fa-info-circle orange"
+    "icon": "fas fa-info-circle orange"
   },
   {
     "code": "901",
     "title": "Temporary Maintenance",
     "desc": "The web server is currently undergoing some maintenance.",
-    "logo": "fas fa-info-circle green"
+    "icon": "fas fa-info-circle green"
   },
   {
     "code": "902",
     "title": "Rate Limit",
     "desc": "The best thing to do is to slow down with your requests and try again in a few minutes.",
-    "logo": "fas fa-info-circle orange"
+    "icon": "fas fa-info-circle orange"
   }
 ]

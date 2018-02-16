@@ -43,8 +43,8 @@ function GenHttpCodes() {
     GetData "${i}" "desc"
     _http_desc="$_msg"
 
-    GetData "${i}" "logo"
-    _http_logo="$_msg"
+    GetData "${i}" "icon"
+    _http_icon="$_msg"
 
     if [[ "$_http_code" -ge 900 ]] ; then
 
@@ -61,7 +61,7 @@ function GenHttpCodes() {
 
     sed -i "s/HTTP_CODE/${_http_full_title}/g" "${_fdir}/${_http_code}.html"
     sed -i "s/HTTP_DESCRIPTION/${_http_desc}/g" "${_fdir}/${_http_code}.html"
-    sed -i "s/FA_IMG/${_http_logo}/g" "${_fdir}/${_http_code}.html"
+    sed -i "s/FA_IMG/${_http_icon}/g" "${_fdir}/${_http_code}.html"
     sed "s/^[ \t]*//" -i "${_fdir}/${_http_code}.html"
 
   done
