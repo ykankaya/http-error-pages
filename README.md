@@ -1,4 +1,4 @@
-# error-pages
+# HTTP Static Error Pages Generator
 
 ## Description
 
@@ -8,9 +8,11 @@ A simple to use generator for **static pages with errors** to replace the defaul
 
 Then an example of starting the tool:
 
-``````
+```bash
 ./httpgen
-``````
+```
+
+The command result is located in the **sites/** directory.
 
 ## Error examples
 
@@ -25,6 +27,26 @@ Then an example of starting the tool:
 
 ### Rate Limit
 ![alt text](doc/img/rate_limit.png)
+
+## Your own error pages
+
+If you would like to add your own static pages to generate, edit the **src/other.json** file and add to it:
+
+```bash
+  {
+    "code" : "903",
+    "title": "HTTP Error Code",
+    "desc" : "This is a example http error code description.",
+    "icon" : "fas fa-info-circle blue"
+  }
+```
+
+Description:
+
+- `code` - specifies the response status codes (eg. 400, 404, 501)
+- `title` - specifies the short title of status code, related to the `code` key (eg. "Not Found", "Bad Gateway")
+- `desc` - determines the possible reason for the error (eg. "The web server is currently undergoing some maintenance")
+- `icon` - sets a small icon from font-awesome for error code (eg. "fas fa-info-circle green", "fas fa-info-circle red")
 
 ## Contributing
 
@@ -41,11 +63,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
     |-- src
         |-- 4xx.json                  # data for 4xx errors
         |-- 5xx.json                  # data for 5xx errors
+        |-- other.json                # data for other (eg. rate-limit) errors
         |-- main.css                  # main css file for all static pages
         |-- templates
-            |-- _rate-limit.html      # static page for rate-limit error
-            |-- _invalid-domain.html  # static page for invalid-domain error
-            |-- _maintenance.html     # static page for maintenance page
             |-- _template.html        # static page for all other errors (eg. 404, 500)
             |-- nginx
                 |-- errors.conf       # config file with error directives
@@ -57,3 +77,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 GPLv3 : <http://www.gnu.org/licenses/>
 
 **Free software, Yeah!**
+
