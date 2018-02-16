@@ -118,6 +118,9 @@ function __main__() {
   GenHttpCodes "src/5xx.json" "${_sites}/errors/5xx"
   GenHttpCodes "src/other.json" "${_sites}/other"
 
+  # Copy default index.html for 'root' directory (eg. Nginx).
+  cp src/index.html "${_sites}/other"
+
 }
 
 # We pass arguments to the __main__ function.
